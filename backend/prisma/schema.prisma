@@ -1,0 +1,23 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Route {
+  id              Int     @id @default(autoincrement())
+  routeId         String
+  year            Int
+  ghgIntensity    Float
+  fuelConsumption Float
+  isBaseline      Boolean @default(false)
+}
+
+model BankEntry {
+  id     Int    @id @default(autoincrement())
+  shipId String
+  year   Int
+  amount Float
+}

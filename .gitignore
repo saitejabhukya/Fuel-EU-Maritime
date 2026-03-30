@@ -1,0 +1,18 @@
+# Node
+node_modules/
+dist/
+
+# Env files
+.env
+
+# Logs
+npm-debug.log*
+
+# OS files
+.DS_Store
+
+# Prisma
+prisma/dev.db
+
+# Vite
+frontend/dist
