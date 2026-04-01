@@ -6,19 +6,17 @@ export class GetComplianceCB {
 
   async execute(shipId: string, year: number) {
     const routes = await this.repo.getRoutesByYear(year);
-
     const compute = new ComputeCB();
 
-    const results = [];
+    await this.repo.deleteCBByShipYear(shipId, year);
 
-    for (let r of routes) {
+    let total = 0;
+    for (const r of routes) {
       const cb = compute.execute(r);
-
-      const saved = await this.repo.saveCB(shipId, year, cb);
-
-      results.push(saved);
+      await this.repo.saveCB(shipId, year, cb);
+      total += cb;
     }
 
-    return results;
+    return { shipId, year, cb: total };
   }
 }

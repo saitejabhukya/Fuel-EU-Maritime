@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import type { Route } from "../types";
+import { routeClient } from "../adapters/infrastructure/apiClient";
 
 export default function RoutesTab() {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [vesselFilter, setVesselFilter] = useState("");
   const [fuelFilter, setFuelFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
+
   const filtered = routes.filter((r) => {
     return (
       (!vesselFilter || r.vesselType === vesselFilter) &&
@@ -15,20 +16,12 @@ export default function RoutesTab() {
     );
   });
 
-  const fetchRoutes = async () => {
-    const res = await axios.get("http://localhost:3000/routes");
-    setRoutes(res.data);
-  };
+  const fetchRoutes = () => routeClient.getRoutes().then(setRoutes);
 
-  useEffect(() => {
-    const load = async () => {
-      await fetchRoutes();
-    };
-    load();
-  }, []);
+  useEffect(() => { fetchRoutes(); }, []);
 
-  const setBaseline = async (id: string) => {
-    await axios.post(`http://localhost:3000/routes/${id}/baseline`);
+  const setBaseline = async (routeId: string) => {
+    await routeClient.setBaseline(routeId);
     fetchRoutes();
   };
 
@@ -36,7 +29,6 @@ export default function RoutesTab() {
     <div>
       <h2 className="text-xl font-semibold mb-4">Routes</h2>
 
-      {/* 🔽 FILTERS */}
       <div className="flex gap-4 mb-4">
         <select
           onChange={(e) => setVesselFilter(e.target.value)}
@@ -69,41 +61,44 @@ export default function RoutesTab() {
         </select>
       </div>
 
-      {/* 📊 TABLE */}
       <table className="w-full border rounded-lg overflow-hidden shadow-sm">
         <thead className="bg-gray-200 text-sm">
           <tr>
-            <th>ID</th>
-            <th>Vessel</th>
-            <th>Fuel</th>
-            <th>Year</th>
-            <th>GHG</th>
-            <th>Fuel (t)</th>
-            <th>Distance (km)</th>
-            <th>Emissions (t)</th>
-            <th>Action</th>
+            <th className="p-2">ID</th>
+            <th className="p-2">Vessel</th>
+            <th className="p-2">Fuel</th>
+            <th className="p-2">Year</th>
+            <th className="p-2">GHG (gCO₂e/MJ)</th>
+            <th className="p-2">Fuel (t)</th>
+            <th className="p-2">Distance (km)</th>
+            <th className="p-2">Emissions (t)</th>
+            <th className="p-2">Action</th>
           </tr>
         </thead>
-
         <tbody>
           {filtered.map((r) => (
             <tr
               key={r.routeId}
-              className="text-center border-t hover:bg-gray-100 transition"
+              className={`text-center border-t hover:bg-gray-50 transition ${r.isBaseline ? "bg-blue-50 font-semibold" : ""}`}
             >
-              <td>{r.routeId}</td>
-              <td>{r.vesselType}</td>
-              <td>{r.fuelType}</td>
-              <td>{r.year}</td>
-              <td>{r.ghgIntensity}</td>
-              <td>{r.fuelConsumption}</td>
-              <td>{r.distance}</td>
-              <td>{r.totalEmissions}</td>
-
-              <td>
+              <td className="p-2">
+                {r.routeId}
+                {r.isBaseline && (
+                  <span className="ml-1 text-xs bg-blue-600 text-white px-1 rounded">BASE</span>
+                )}
+              </td>
+              <td className="p-2">{r.vesselType}</td>
+              <td className="p-2">{r.fuelType}</td>
+              <td className="p-2">{r.year}</td>
+              <td className="p-2">{r.ghgIntensity}</td>
+              <td className="p-2">{r.fuelConsumption}</td>
+              <td className="p-2">{r.distance}</td>
+              <td className="p-2">{r.totalEmissions}</td>
+              <td className="p-2">
                 <button
                   onClick={() => setBaseline(r.routeId)}
-                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                  disabled={r.isBaseline}
+                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 disabled:opacity-40"
                 >
                   Set Baseline
                 </button>

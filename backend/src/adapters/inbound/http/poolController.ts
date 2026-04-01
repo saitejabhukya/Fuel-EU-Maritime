@@ -5,7 +5,11 @@ import { CreatePool } from "../../../core/application/createPool";
 const repo = new PoolRepositoryImpl();
 
 export const createPoolAPI = async (req: Request, res: Response) => {
-  const usecase = new CreatePool(repo);
-  const result = await usecase.execute(req.body.members);
-  res.json(result);
+  try {
+    const usecase = new CreatePool(repo);
+    const result = await usecase.execute(req.body.members);
+    res.json(result);
+  } catch (e: any) {
+    res.status(400).json({ error: e.message });
+  }
 };
