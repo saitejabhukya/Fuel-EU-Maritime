@@ -4,6 +4,6 @@ export class GetRoutes {
   constructor(private repo: RouteRepository) {}
 
   async execute() {
-    return this.repo.getAllRoutes();
+    return this.repo.getAll();
   }
 }

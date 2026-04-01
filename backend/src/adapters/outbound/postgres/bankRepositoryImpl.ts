@@ -1,13 +1,22 @@
-import { BankRepository } from "../../../core/ports/bankRepository";
+import { prisma } from "../../../infrastructure/db/prismaClient";
 
-let store: Record<string, number> = {};
+export class BankRepositoryImpl {
 
-export class BankRepositoryImpl implements BankRepository {
   async getBanked(shipId: string) {
-    return store[shipId] || 0;
+    const records = await prisma.bankEntry.findMany({
+      where: { shipId }
+    });
+
+    return records.reduce((sum, r) => sum + r.amount, 0);
   }
 
   async saveBanked(shipId: string, amount: number) {
-    store[shipId] = amount;
+    await prisma.bankEntry.create({
+      data: {
+        shipId,
+        year: new Date().getFullYear(),
+        amount
+      }
+    });
   }
 }

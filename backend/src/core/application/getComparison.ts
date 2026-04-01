@@ -4,7 +4,7 @@ export class GetComparison {
   constructor(private repo: RouteRepository) {}
 
   async execute() {
-    const routes = await this.repo.getAllRoutes();
+    const routes = await this.repo.getAll();
     const baseline = await this.repo.getBaseline();
 
     if (!baseline) throw new Error("No baseline");

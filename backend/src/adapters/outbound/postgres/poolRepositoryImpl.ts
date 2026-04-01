@@ -1,7 +1,21 @@
-import { PoolRepository } from "../../../core/ports/poolRepository";
+import { prisma } from "../../../infrastructure/db/prismaClient";
 
-export class PoolRepositoryImpl implements PoolRepository {
+export class PoolRepositoryImpl {
+
   async savePool(result: any) {
-    console.log("Pool saved:", result);
+    const pool = await prisma.pool.create({
+      data: { year: new Date().getFullYear() }
+    });
+
+    for (let m of result) {
+      await prisma.poolMember.create({
+        data: {
+          poolId: pool.id,
+          shipId: m.shipId,
+          cbBefore: 0,
+          cbAfter: m.cb_after
+        }
+      });
+    }
   }
 }

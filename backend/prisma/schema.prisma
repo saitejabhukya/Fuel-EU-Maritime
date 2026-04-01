@@ -10,24 +10,28 @@ generator client {
 model Route {
   id              Int     @id @default(autoincrement())
   routeId         String
+  vesselType      String
+  fuelType        String
   year            Int
   ghgIntensity    Float
   fuelConsumption Float
+  distance        Float
+  totalEmissions  Float
   isBaseline      Boolean @default(false)
 }
 
 model ShipCompliance {
-  id         Int    @id @default(autoincrement())
-  shipId     String
-  year       Int
-  cb         Float
+  id     Int    @id @default(autoincrement())
+  shipId String
+  year   Int
+  cb     Float
 }
 
 model BankEntry {
-  id        Int    @id @default(autoincrement())
-  shipId    String
-  year      Int
-  amount    Float
+  id     Int    @id @default(autoincrement())
+  shipId String
+  year   Int
+  amount Float
 }
 
 model Pool {
