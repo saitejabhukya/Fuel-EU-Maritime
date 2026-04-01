@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# Fuel EU Maritime — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + TailwindCSS dashboard implementing a FuelEU Maritime compliance UI with hexagonal architecture.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** + **TypeScript** (strict mode)
+- **TailwindCSS** for styling
+- **Recharts** for data visualisation
+- **Axios** for HTTP calls
+- **Vitest** for unit testing
 
-## React Compiler
+## Architecture (Hexagonal)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+  core/
+    domain/types.ts         – Domain entity types
+    application/compliance.ts – Pure use-case functions (CB formula, pool validation)
+    ports/apiPorts.ts       – Outbound port interfaces (RoutePort, BankingPort…)
+  adapters/
+    infrastructure/apiClient.ts – Axios implementation of all ports
+    ui/                     – (tabs serve as UI adapters)
+  shared/
+    constants.ts            – TARGET_GHG_INTENSITY, ENERGY_CONVERSION_FACTOR
+  tabs/                     – React components (RoutesTab, CompareTab, BankingTab, PoolingTab)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Setup & Run
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd frontend/FuelEU_Maritime
+npm install
+npm run dev        # starts on http://localhost:5173
 ```
+
+> Requires the backend running on `http://localhost:3000`
+
+## Tests
+
+```bash
+npm test
+```
+
+15 unit tests covering CB formula, compliance checks, percent diff, pool sum, and pool validity.
+
+## Tabs
+
+| Tab | Description |
+|-----|-------------|
+| Routes | All routes with filters by vessel/fuel/year; Set Baseline action |
+| Compare | GHG intensity vs baseline; % diff; compliance status; bar chart with target reference line |
+| Banking | Get CB, Bank Surplus, Apply Banked credits; KPI display (cb_before/applied/cb_after) |
+| Pooling | Fetch adjusted CB per ship, edit CBs, create pool with sum validation indicator |
+
