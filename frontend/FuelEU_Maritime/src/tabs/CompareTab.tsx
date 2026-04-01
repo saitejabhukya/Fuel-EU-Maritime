@@ -1,27 +1,32 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import type { Comparison } from "../types";
 
-interface ComparisonRoute {
-  routeId: string;
-  ghgIntensity: number;
-  percentDiff: number;
-  compliant: boolean;
-}
-
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid
+} from "recharts";
 
 export default function CompareTab() {
-  const [data, setData] = useState<ComparisonRoute[]>([]);
+  const [data, setData] = useState<Comparison[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/routes/comparison")
+    axios
+      .get("http://localhost:3000/routes/comparison")
       .then(res => setData(res.data));
   }, []);
 
   return (
     <div>
-      <table className="border w-full mb-4">
-        <thead>
+      <h2 className="text-xl font-semibold mb-4">Comparison</h2>
+
+      <table className="w-full border mb-6">
+        <thead className="bg-gray-200">
           <tr>
             <th>ID</th>
             <th>GHG</th>
@@ -29,9 +34,10 @@ export default function CompareTab() {
             <th>Status</th>
           </tr>
         </thead>
+
         <tbody>
           {data.map(r => (
-            <tr key={r.routeId}>
+            <tr key={r.routeId} className="text-center border-t">
               <td>{r.routeId}</td>
               <td>{r.ghgIntensity}</td>
               <td>{r.percentDiff.toFixed(2)}%</td>
@@ -41,11 +47,13 @@ export default function CompareTab() {
         </tbody>
       </table>
 
-      <BarChart width={500} height={300} data={data}>
+      <BarChart width={700} height={300} data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="routeId" />
         <YAxis />
         <Tooltip />
-        <Bar dataKey="ghgIntensity" />
+        <Legend />
+        <Bar dataKey="ghgIntensity" fill="#3b82f6" />
       </BarChart>
     </div>
   );

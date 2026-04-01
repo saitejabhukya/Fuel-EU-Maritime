@@ -4,43 +4,39 @@ import CompareTab from "./tabs/CompareTab";
 import BankingTab from "./tabs/BankingTab";
 import PoolingTab from "./tabs/PoolingTab";
 
-function App() {
-  const [activeTab, setActiveTab] = useState("routes");
+export default function App() {
+  const [tab, setTab] = useState("routes");
 
-  const renderTab = () => {
-    switch (activeTab) {
-      case "routes":
-        return <RoutesTab />;
-      case "compare":
-        return <CompareTab />;
-      case "banking":
-        return <BankingTab />;
-      case "pooling":
-        return <PoolingTab />;
-    }
-  };
+  const tabs = ["routes", "compare", "banking", "pooling"];
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Fuel EU Dashboard</h1>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h1 className="text-3xl font-bold mb-6 text-blue-700">
+        🚢 Fuel EU Dashboard
+      </h1>
 
-      <div className="flex gap-4 mb-4">
-        {["routes", "compare", "banking", "pooling"].map(tab => (
+      <div className="flex gap-3 mb-6">
+        {tabs.map(t => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 border rounded ${
-              activeTab === tab ? "bg-blue-500 text-white" : ""
+            key={t}
+            onClick={() => setTab(t)}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              tab === t
+                ? "bg-blue-600 text-white"
+                : "bg-white border hover:bg-gray-200"
             }`}
           >
-            {tab}
+            {t.toUpperCase()}
           </button>
         ))}
       </div>
 
-      {renderTab()}
+      <div className="bg-white p-4 rounded-xl shadow">
+        {tab === "routes" && <RoutesTab />}
+        {tab === "compare" && <CompareTab />}
+        {tab === "banking" && <BankingTab />}
+        {tab === "pooling" && <PoolingTab />}
+      </div>
     </div>
   );
 }
-
-export default App;

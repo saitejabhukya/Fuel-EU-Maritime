@@ -3,11 +3,14 @@ import axios from "axios";
 
 export default function BankingTab() {
   const [cb, setCb] = useState(0);
-  const [message, setMessage] = useState("");
+  const [msg, setMsg] = useState("");
 
-  const fetchCB = async () => {
-    const res = await axios.get("http://localhost:3000/compliance/cb");
-    setCb(res.data.cb);
+  const getCB = async () => {
+    const res = await axios.get(
+      "http://localhost:3000/compliance/cb?shipId=S1&year=2024"
+    );
+
+    setCb(res.data[0]?.cb || 0);
   };
 
   const bank = async () => {
@@ -16,33 +19,38 @@ export default function BankingTab() {
         shipId: "S1",
         cb
       });
-      setMessage(`Banked: ${res.data.banked}`);
-    } catch (e) {
-      if (axios.isAxiosError(e) && e.response) {
-        setMessage(e.response.data.error);
-      } else {
-        setMessage("An error occurred");
-      }
+      setMsg(`Banked: ${res.data.banked}`);
+    } catch (e: unknown) {
+    if (axios.isAxiosError(e)) {
+      setMsg(e.response?.data?.error || "Error");
+    } else {
+      setMsg("Unknown error");
     }
+  }
   };
 
   return (
     <div>
-      <button onClick={fetchCB} className="bg-blue-500 text-white p-2">
+      <h2 className="text-xl font-semibold mb-4">Banking</h2>
+
+      <button
+        onClick={getCB}
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+      >
         Get CB
       </button>
 
-      <p>CB: {cb}</p>
+      <p className="mt-2">CB: {cb}</p>
 
       <button
         onClick={bank}
         disabled={cb <= 0}
-        className="bg-green-500 text-white p-2"
+        className="bg-green-500 text-white px-4 py-2 mt-2 rounded"
       >
         Bank
       </button>
 
-      <p>{message}</p>
+      <p className="mt-2 text-sm">{msg}</p>
     </div>
   );
 }
