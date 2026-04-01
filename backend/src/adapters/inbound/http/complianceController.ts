@@ -1,32 +1,18 @@
 import { Request, Response } from "express";
-import { prisma } from "../../../infrastructure/db/prismaClient";
-import { computeCB } from "../../../core/application/computeCB";
+import { ComplianceRepositoryImpl } from "../../outbound/postgres/complianceRepositoryImpl";
+import { GetComplianceCB } from "../../../core/application/getComplianceCB";
+
+const repo = new ComplianceRepositoryImpl();
 
 export const getCB = async (req: Request, res: Response) => {
-  const { shipId, year } = req.query;
-
   try {
-    const routes = await prisma.route.findMany({
-      where: { year: Number(year) }
-    });
+    const shipId = String(req.query.shipId);
+    const year = Number(req.query.year);
 
-    const results = [];
+    const usecase = new GetComplianceCB(repo);
+    const result = await usecase.execute(shipId, year);
 
-    for (let r of routes) {
-      const cb = computeCB(r);
-
-      const saved = await prisma.shipCompliance.create({
-        data: {
-          shipId: String(shipId),
-          year: Number(year),
-          cb
-        }
-      });
-
-      results.push(saved);
-    }
-
-    res.json(results);
+    res.json(result);
   } catch (e: any) {
     res.status(400).json({ error: e.message });
   }

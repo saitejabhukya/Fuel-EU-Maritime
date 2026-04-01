@@ -1,9 +1,25 @@
 import { Request, Response } from "express";
+import { RouteRepositoryImpl } from "../../outbound/postgres/routeRepositoryImpl";
+import { GetRoutes } from "../../../core/application/getRoutes";
+import { SetBaseline } from "../../../core/application/setBaseline";
+import { GetComparison } from "../../../core/application/getComparison";
 
-let routes = [
-  { routeId: "R001", ghgIntensity: 91.0, fuelConsumption: 5000, year: 2024 }
-];
+const repo = new RouteRepositoryImpl();
 
-export const getRoutes = (req: Request, res: Response) => {
-  res.json(routes);
+export const getRoutes = async (req: Request, res: Response) => {
+  const usecase = new GetRoutes(repo);
+  const result = await usecase.execute();
+  res.json(result);
+};
+
+export const setBaseline = async (req: Request, res: Response) => {
+  const usecase = new SetBaseline(repo);
+  await usecase.execute(req.params.id as string);
+  res.json({ message: "Baseline set" });
+};
+
+export const getComparison = async (req: Request, res: Response) => {
+  const usecase = new GetComparison(repo);
+  const result = await usecase.execute();
+  res.json(result);
 };
