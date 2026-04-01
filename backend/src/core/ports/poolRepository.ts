@@ -1,3 +1,5 @@
+import { PoolMember } from "../domain/pool";
+
 export interface PoolRepository {
-  savePool(result: any): Promise<void>;
+  savePool(members: PoolMember[], year: number): Promise<void>;
 }

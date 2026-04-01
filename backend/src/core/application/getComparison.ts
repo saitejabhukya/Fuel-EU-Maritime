@@ -17,7 +17,8 @@ export class GetComparison {
         routeId: r.routeId,
         ghgIntensity: r.ghgIntensity,
         percentDiff,
-        compliant: r.ghgIntensity <= 89.3368
+        compliant: r.ghgIntensity <= 89.3368,
+        isBaseline: r.routeId === baseline.routeId
       };
     });
   }
