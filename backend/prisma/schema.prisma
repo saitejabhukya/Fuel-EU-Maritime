@@ -4,6 +4,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 model Route {
@@ -15,9 +16,30 @@ model Route {
   isBaseline      Boolean @default(false)
 }
 
+model ShipCompliance {
+  id         Int    @id @default(autoincrement())
+  shipId     String
+  year       Int
+  cb         Float
+}
+
 model BankEntry {
-  id     Int    @id @default(autoincrement())
-  shipId String
-  year   Int
-  amount Float
+  id        Int    @id @default(autoincrement())
+  shipId    String
+  year      Int
+  amount    Float
+}
+
+model Pool {
+  id        Int      @id @default(autoincrement())
+  year      Int
+  createdAt DateTime @default(now())
+}
+
+model PoolMember {
+  id        Int    @id @default(autoincrement())
+  poolId    Int
+  shipId    String
+  cbBefore  Float
+  cbAfter   Float
 }
