@@ -71,7 +71,7 @@ src/
 
 - Node.js ≥ 18
 - PostgreSQL running locally
-- `.env` file in `/backend` with `DATABASE_URL=postgresql://user:password@localhost:5432/fueleu`
+- Create `.env` file in `/backend` and paste this line `DATABASE_URL = "postgresql://postgres:your_password@localhost:5432/database_name"` , change the password and the database name you have created in PostgreSQL
 
 ### Backend
 
