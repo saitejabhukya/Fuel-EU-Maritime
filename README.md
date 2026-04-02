@@ -26,19 +26,19 @@ Both backend and frontend follow the hexagonal architecture pattern — the doma
 ```
 src/
   core/
-    domain/          – Route, Compliance, BankEntry, Pool, PoolMember interfaces
-    application/     – Use-cases: ComputeCB, GetComplianceCB, GetAdjustedCB,
-                       BankSurplus, ApplyBanked, CreatePool, GetRoutes,
-                       SetBaseline, GetComparison
-    ports/           – Repository interfaces (RouteRepository, ComplianceRepository,
-                       BankRepository, PoolRepository)
+    domain/               – Route, Compliance, BankEntry, Pool, PoolMember interfaces
+    application/          – Use-cases: ComputeCB, GetComplianceCB, GetAdjustedCB,
+                            BankSurplus, ApplyBanked, CreatePool, GetRoutes,
+                            SetBaseline, GetComparison
+    ports/                – Repository interfaces (RouteRepository, ComplianceRepository,
+                            BankRepository, PoolRepository)
   adapters/
-    inbound/http/    – Express controllers (routesController, complianceController,
-                       bankingController, poolController)
-    outbound/postgres/ – Prisma-backed repository implementations
+    inbound/http/         – Express controllers (routesController, complianceController,
+                            bankingController, poolController)
+    outbound/postgres/    – Prisma-backed repository implementations
   infrastructure/
-    db/              – PrismaClient setup
-    server/          – Express server + route registration
+    db/                   – PrismaClient setup
+    server/               – Express server + route registration
 ```
 
 ### Frontend (`/frontend/FuelEU_Maritime`)
@@ -46,13 +46,13 @@ src/
 ```
 src/
   core/
-    domain/types.ts         – Domain entity types
-    application/compliance.ts – Pure use-case functions (CB formula, pool validation)
-    ports/apiPorts.ts       – Outbound port interfaces
+    domain/types.ts               – Domain entity types
+    application/compliance.ts     – Pure use-case functions (CB formula, pool validation)
+    ports/apiPorts.ts             – Outbound port interfaces
   adapters/
-    infrastructure/apiClient.ts – Axios API client implementing all ports
-  shared/constants.ts       – TARGET_GHG_INTENSITY, ENERGY_CONVERSION_FACTOR
-  tabs/                     – React UI components (one per dashboard tab)
+    infrastructure/apiClient.ts   – Axios API client implementing all ports
+  shared/constants.ts             – TARGET_GHG_INTENSITY, ENERGY_CONVERSION_FACTOR
+  tabs/                            – React UI components (one per dashboard tab)
 ```
 
 ### Key Constants
