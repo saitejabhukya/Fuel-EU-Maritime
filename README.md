@@ -208,4 +208,4 @@ POST /pools
 | R004 | RoRo | HFO | 2025 | 89.2 | 4900 | 11800 | 4300 |
 | R005 | Container | LNG | 2025 | 90.5 | 4950 | 11900 | 4400 |
 
-R001 is seeded as the baseline route.
+R001 is initially seeded as the baseline route. You can change it later.
