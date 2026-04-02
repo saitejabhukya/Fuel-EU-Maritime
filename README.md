@@ -70,10 +70,12 @@ src/
 - Express.js
 - Prisma ORM
 - SQLite / PostgreSQL
+  
 **Frontend**
 - React + TypeScript
 - TailwindCSS
 - Recharts
+  
 **Testing**
 - Jest (backend)
 - Vitest (frontend)
