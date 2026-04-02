@@ -63,6 +63,21 @@ src/
 | Energy conversion factor | 41,000 MJ/t | FuelEU Annex IV |
 | CB formula | `(Target − Actual) × (fuelConsumption × 41000)` | Article 4 |
 
+### Tech Stack
+
+**Backend**
+- Node.js + TypeScript
+- Express.js
+- Prisma ORM
+- SQLite / PostgreSQL
+**Frontend**
+- React + TypeScript
+- TailwindCSS
+- Recharts
+**Testing**
+- Jest (backend)
+- Vitest (frontend)
+
 ---
 
 ## Setup & Run
@@ -78,9 +93,10 @@ src/
 ```bash
 cd backend
 npm install
-npx prisma migrate dev      # runs migrations
-npx prisma db seed           # seeds 5 sample routes
-npm run dev                  # starts on http://localhost:3000
+npx prisma generate
+npx prisma migrate dev         # runs migrations
+npx ts-node prisma/seed.ts     # seeds 5 sample routes
+npm run dev                    # starts on http://localhost:3000
 ```
 
 ### Frontend
