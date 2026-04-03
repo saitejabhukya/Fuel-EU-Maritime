@@ -79,7 +79,7 @@ src/
 cd backend
 npm install
 npx prisma migrate dev      # runs migrations
-npx prisma db seed           # seeds 5 sample routes
+npx ts-node prisma/seed.ts          # seeds 5 sample routes
 npm run dev                  # starts on http://localhost:3000
 ```
 
